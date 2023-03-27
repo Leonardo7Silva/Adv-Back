@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Advogados {
+  id        Int         @id(map: "Advogados_pk") @default(autoincrement())
+  name      String
+  oab       String      @unique
+  tel       String?
+  email     String?
+  officeId  Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?   @updatedAt
+  Offices   Offices     @relation(fields: [officeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Advogados_fk0")
+  Processos Processos[]
+}
+
+model Clientes {
+  id        Int         @id(map: "Clientes_pk") @default(autoincrement())
+  name      String
+  cpf       String      @unique
+  tel       String?
+  email     String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?   @updatedAt
+  officeId  Int
+  Offices   Offices     @relation(fields: [officeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Clientes_fk0")
+  Processos Processos[]
+}
+
+model Comentarios {
+  id        Int       @id(map: "Comentarios_pk") @default(autoincrement())
+  comment   String
+  processId Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Processos Processos @relation(fields: [processId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Comentarios_fk0")
+}
+
+model Offices {
+  id        Int         @id(map: "Offices_pk") @default(autoincrement())
+  username  String      @unique
+  password  String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?   @updatedAt
+  Advogados Advogados[]
+  Clientes  Clientes[]
+}
+
+model Processos {
+  id            Int           @id(map: "Processos_pk") @default(autoincrement())
+  numberProcess String        @unique
+  ClientId      Int
+  AdvogadoId    Int
+  secret        Boolean
+  limitTime     DateTime      @db.Date
+  limitTimeDesc String
+  createdAt     DateTime      @default(now())
+  updateAt      DateTime?     @updatedAt
+  Comentarios   Comentarios[]
+  Clientes      Clientes      @relation(fields: [ClientId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk0")
+  Advogados     Advogados     @relation(fields: [AdvogadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk1")
+}
