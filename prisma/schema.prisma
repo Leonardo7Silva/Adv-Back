@@ -45,6 +45,7 @@ model Comentarios {
 model Offices {
   id        Int         @id(map: "Offices_pk") @default(autoincrement())
   username  String      @unique
+  email     String      @unique
   password  String
   createdAt DateTime    @default(now())
   updatedAt DateTime?   @updatedAt
@@ -53,16 +54,18 @@ model Offices {
 }
 
 model Processos {
-  id            Int           @id(map: "Processos_pk") @default(autoincrement())
-  numberProcess String        @unique
-  ClientId      Int
-  AdvogadoId    Int
-  secret        Boolean
-  limitTime     DateTime      @db.Date
-  limitTimeDesc String
-  createdAt     DateTime      @default(now())
-  updateAt      DateTime?     @updatedAt
-  Comentarios   Comentarios[]
-  Clientes      Clientes      @relation(fields: [ClientId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk0")
-  Advogados     Advogados     @relation(fields: [AdvogadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk1")
+  id              Int           @id(map: "Processos_pk") @default(autoincrement())
+  numberProcess   String        @unique
+  clientId        Int
+  advogadoId      Int
+  secret          Boolean
+  anotherPartDoc  String
+  anotherPartName String
+  limitTime       DateTime?      @db.Date
+  limitTimeDesc   String?
+  createdAt       DateTime      @default(now())
+  updateAt        DateTime?     @updatedAt
+  Comentarios     Comentarios[]
+  Clientes        Clientes      @relation(fields: [clientId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk0")
+  Advogados       Advogados     @relation(fields: [advogadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk1")
 }

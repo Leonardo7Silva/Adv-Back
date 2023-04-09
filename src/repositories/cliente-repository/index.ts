@@ -1,5 +1,6 @@
 import prisma from "../../database/database";
 import { Clientes } from "@prisma/client";
+import { CreateClient } from "../../protocols";
 
 async function create(params: CreateClient): Promise<Clientes>{
 
@@ -83,5 +84,5 @@ const clientRepository = {
     deleteClient
 }
 
-export type CreateClient = Omit<Clientes, 'id' | 'createdAt' | 'updatedAt' >
+
 export default clientRepository;

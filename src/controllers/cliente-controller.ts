@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
+import { AuthenticatedRequest } from "../middlewares/auth-middleware";
+import { Response } from "express";
 import clientService from "../services/cliente-service";
 import httpStatus from "http-status";
 
-export async function postClient(req:Request, res:Response){
-    const officeId = 1
+export async function postClient(req:AuthenticatedRequest, res:Response){
+    const {officeId} = req
     const params = {
         officeId,
         ...req.body
@@ -16,7 +17,7 @@ export async function postClient(req:Request, res:Response){
     }
 };
 
-export async function getAllTheClients(req: Request, res:Response){
+export async function getAllTheClients(req: AuthenticatedRequest, res:Response){
 
     const {cpf} = req.query;
     const {name} = req.query
@@ -29,9 +30,9 @@ export async function getAllTheClients(req: Request, res:Response){
     }
 }
 
-export async function updateOneClient(req:Request, res: Response) {
+export async function updateOneClient(req:AuthenticatedRequest, res: Response) {
     
-    const officeId = 1
+    const {officeId} = req
     const {clientId} = req.params
     const params = {
         officeId,
@@ -51,12 +52,12 @@ export async function updateOneClient(req:Request, res: Response) {
     }
 }
 
-export async function deleteOneClient(req:Request, res: Response) {
+export async function deleteOneClient(req:AuthenticatedRequest, res: Response) {
     
-    const officeId = 1
+    const {officeId} = req
     const {clientId} = req.params
     try{
-        const deletedClient = await clientService.deleteOneClient(Number(clientId))
+        const deletedClient = await clientService.deleteOneClient(Number(clientId), Number(officeId))
         return res.status(httpStatus.OK).send(deletedClient)
     }catch(err){
         if(err.name === "NotFoundError"){

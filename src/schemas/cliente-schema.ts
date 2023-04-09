@@ -1,4 +1,4 @@
-import { CreateClient } from "../repositories";
+import { CreateClient } from "../protocols"
 import { isValidCPF, isValidMobilePhone } from "@brazilian-utils/brazilian-utils";
 import Joi from "joi";
 

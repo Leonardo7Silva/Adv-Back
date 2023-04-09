@@ -1,7 +1,8 @@
-import clientRepository, {CreateClient} from "../../repositories/cliente-repository";
+import clientRepository from "../../repositories/cliente-repository";
 import { duplicatedCpfError } from "../../errors/duplicated-cpf-error";
 import { notFoundError } from "../../errors/not-found-error";
 import { Clientes } from "@prisma/client";
+import { CreateClient } from "../../protocols";
 
 
 async function createClient(params: CreateClient): Promise<Clientes>{
@@ -42,6 +43,10 @@ async function updateClient(params:CreateClient, clientId:number):Promise<Client
         throw notFoundError();
     }
 
+    if(client.officeId !== params.officeId){
+        throw notFoundError
+    }
+
     const thereCpf = await clientRepository.findWithcpf(params.cpf)
     if(thereCpf.length > 0 && thereCpf[0].id !== clientId){
         throw duplicatedCpfError();
@@ -52,12 +57,16 @@ async function updateClient(params:CreateClient, clientId:number):Promise<Client
 
 }
 
-async function deleteOneClient(clientId:number){
+async function deleteOneClient(clientId:number, officeId: number){
 
     const client = await clientRepository.findById(clientId)
 
     if(!client){
         throw notFoundError();
+    }
+
+    if(client.officeId !== officeId){
+        throw notFoundError
     }
 
     const deletedClient = await clientRepository.deleteClient(clientId)
