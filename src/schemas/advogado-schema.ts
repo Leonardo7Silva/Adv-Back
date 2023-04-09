@@ -8,7 +8,7 @@ export const createLawyerSchema = Joi.object<InputCreateLawyer>({
     name: Joi.string().min(3).required(),
     tel: mobilePhoneValidationSchema,
     email: Joi.string().email(),
-    oab: Joi.string().min(8).required()
+    oab: Joi.string().min(6).required()
 });
 
 export const updateLawyerSchema = Joi.object<InputCreateLawyer>({

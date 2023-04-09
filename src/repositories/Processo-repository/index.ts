@@ -56,6 +56,29 @@ async function findWithClientId(clientId: number):Promise<Processos[]> {
     })
 };
 
+async function findWithClientName(clientName: string): Promise<Processos[]>{
+    return prisma.processos.findMany({
+        where:{
+            Clientes:{
+                name:{
+                    startsWith: clientName
+                }
+            }
+        }
+    })
+};
+
+async function findWithLawyerName(lawyerName: string): Promise<Processos[]>{
+    return prisma.processos.findMany({
+        where:{
+            Advogados:{
+                name:{
+                    startsWith: lawyerName                }
+            }
+        }
+    })
+};
+
 async function findById(processId: number):Promise<Processos> {
     return prisma.processos.findFirst({
         where:{
@@ -63,6 +86,14 @@ async function findById(processId: number):Promise<Processos> {
         }
     })
 };
+
+async function findAllWihtlimit(){
+    return prisma.processos.findMany({
+        orderBy:{
+            limitTime:"asc"
+        }
+    })
+}
 
 async function update(params:CreateProcess, processId:number): Promise<Processos>{
     return prisma.processos.update({
@@ -90,6 +121,9 @@ const processRepository = {
     findWithNumberProcess,
     findWithLawyerId,
     findWithClientId,
+    findWithClientName,
+    findWithLawyerName,
+    findAllWihtlimit,
     update,
     findById,
     deleteProcess

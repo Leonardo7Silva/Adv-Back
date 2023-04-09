@@ -38,7 +38,7 @@ async function findWithName(name: string):Promise<Clientes[]> {
         where:{
             name:{
                 startsWith: name
-            }
+            },
         },
         orderBy:{
             name:"asc"

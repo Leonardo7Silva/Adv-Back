@@ -64,7 +64,7 @@ model Processos {
   limitTime       DateTime?      @db.Date
   limitTimeDesc   String?
   createdAt       DateTime      @default(now())
-  updateAt        DateTime?     @updatedAt
+  updatedAt        DateTime?     @updatedAt
   Comentarios     Comentarios[]
   Clientes        Clientes      @relation(fields: [clientId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk0")
   Advogados       Advogados     @relation(fields: [advogadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk1")

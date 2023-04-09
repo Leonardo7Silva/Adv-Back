@@ -17,8 +17,21 @@ export type InputCreateLawyer = Omit<Advogados, 'id' | 'createdAt' | 'updatedAt'
 
 export type CreateProcess = Omit<Processos, 'id' | 'createdAt' | 'updatedAt' >
 
+export type InputCreateProcess = {
+  numberProcess: string,
+  cpf: string,
+  oab: string,
+  limitTime: Date,
+  limitTimeDesc: string,
+  secret: boolean,
+  anotherPartDoc: string,
+  anotherPartName: string
+}
+
 export type GetProcess = {
   numberProcess: string,
   cpf: string,
-  oab: string
+  oab: string,
+  clientName: string,
+  lawyerName: string
 }

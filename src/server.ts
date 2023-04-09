@@ -4,6 +4,7 @@ import clientRouter from './routers/cliente-router';
 import officeRouter from './routers/escritorio-router';
 import signinRouter from './routers/signin-router';
 import lawyerRouter from './routers/advogado-router';
+import processRouter from './routers/processo-router';
 
 const app = express();
 
@@ -15,6 +16,7 @@ app
     .use("/escritorio", officeRouter)
     .use("/signin", signinRouter)
     .use("/advogado", lawyerRouter)
+    .use("/processo", processRouter)
 
 
 
