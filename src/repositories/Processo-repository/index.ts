@@ -14,6 +14,20 @@ async function create(params: CreateProcess): Promise<Processos>{
 
 async function findAll():Promise<Processos[]>{
     return prisma.processos.findMany({
+        include:{
+            Clientes:{
+                select:{
+                    name: true,
+                    cpf:true,
+                }
+            },
+            Advogados: {
+                select:{
+                    name: true,
+                    oab: true
+                }
+            }
+        },
         orderBy:{
             createdAt: "desc"
         }
@@ -25,6 +39,20 @@ async function findWithNumberProcess(number: string):Promise<Processos[]> {
         where:{
             numberProcess:{
                 startsWith: number
+            }
+        },
+        include:{
+            Clientes:{
+                select:{
+                    name: true,
+                    cpf:true,
+                }
+            },
+            Advogados: {
+                select:{
+                    name: true,
+                    oab: true
+                }
             }
         },
         orderBy:{
@@ -39,6 +67,20 @@ async function findWithLawyerId(lawyerId: number):Promise<Processos[]> {
         where:{
             advogadoId: lawyerId
         },
+        include:{
+            Clientes:{
+                select:{
+                    name: true,
+                    cpf:true,
+                }
+            },
+            Advogados: {
+                select:{
+                    name: true,
+                    oab: true
+                }
+            }
+        },
         orderBy:{
             createdAt: "desc"
         }
@@ -49,6 +91,20 @@ async function findWithClientId(clientId: number):Promise<Processos[]> {
     return prisma.processos.findMany({
         where:{
             clientId: clientId
+        },
+        include:{
+            Clientes:{
+                select:{
+                    name: true,
+                    cpf:true,
+                }
+            },
+            Advogados: {
+                select:{
+                    name: true,
+                    oab: true
+                }
+            }
         },
         orderBy:{
             createdAt: "desc"
@@ -64,6 +120,23 @@ async function findWithClientName(clientName: string): Promise<Processos[]>{
                     startsWith: clientName
                 }
             }
+        },
+        include:{
+            Clientes:{
+                select:{
+                    name: true,
+                    cpf:true,
+                }
+            },
+            Advogados: {
+                select:{
+                    name: true,
+                    oab: true
+                }
+            }
+        },
+        orderBy:{
+            createdAt: "desc"
         }
     })
 };
@@ -75,6 +148,23 @@ async function findWithLawyerName(lawyerName: string): Promise<Processos[]>{
                 name:{
                     startsWith: lawyerName                }
             }
+        },
+       include:{
+            Clientes:{
+                select:{
+                    name: true,
+                    cpf:true,
+                }
+            },
+            Advogados: {
+                select:{
+                    name: true,
+                    oab: true
+                }
+            }
+        },
+        orderBy:{
+            createdAt: "desc"
         }
     })
 };
@@ -89,6 +179,20 @@ async function findById(processId: number):Promise<Processos> {
 
 async function findAllWihtlimit(){
     return prisma.processos.findMany({
+       include:{
+            Clientes:{
+                select:{
+                    name: true,
+                    cpf:true,
+                }
+            },
+            Advogados: {
+                select:{
+                    name: true,
+                    oab: true
+                }
+            }
+        },
         orderBy:{
             limitTime:"asc"
         }

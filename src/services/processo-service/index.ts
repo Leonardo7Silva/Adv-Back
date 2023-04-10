@@ -43,7 +43,7 @@ async function createProcess(params: InputCreateProcess): Promise<Processos>{
     return newProcess
 };
 
-async function getAllProcess({numberProcess, oab, cpf, lawyerName, clientName}: GetProcess): Promise<Processos[]>{
+async function getAllProcess({numberProcess, oab, cpf, lawyerName, clientName}): Promise<Processos[]>{
 
     let process = []
 
@@ -98,6 +98,7 @@ async function getAllProcess({numberProcess, oab, cpf, lawyerName, clientName}: 
 
 const processService = {
     createProcess,
+    getAllProcess
 };
 
 export default processService
