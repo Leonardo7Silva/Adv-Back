@@ -42,13 +42,11 @@ export async function updateOneClient(req:AuthenticatedRequest, res: Response) {
         const uptadedClient = await clientService.updateClient(params, Number(clientId))
         return res.status(httpStatus.OK).send(uptadedClient)
     }catch(err){
-        if(err.name === "DuplicatedCpfError"){
-            res.status(httpStatus.FORBIDDEN).send(err)
-        }
+
         if(err.name === "NotFoundError"){
-            res.status(httpStatus.NOT_FOUND).send(err)
+            return res.status(httpStatus.NOT_FOUND).send(err)
         }
-        console.log(err)
+        return res.status(httpStatus.FORBIDDEN).send(err)
     }
 }
 

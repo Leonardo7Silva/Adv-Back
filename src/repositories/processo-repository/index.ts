@@ -24,7 +24,8 @@ async function findAll():Promise<Processos[]>{
             Advogados: {
                 select:{
                     name: true,
-                    oab: true
+                    oab: true,
+                    officeId: true
                 }
             }
         },
@@ -51,7 +52,8 @@ async function findWithNumberProcess(number: string):Promise<Processos[]> {
             Advogados: {
                 select:{
                     name: true,
-                    oab: true
+                    oab: true,
+                    officeId: true
                 }
             }
         },
@@ -77,7 +79,8 @@ async function findWithLawyerId(lawyerId: number):Promise<Processos[]> {
             Advogados: {
                 select:{
                     name: true,
-                    oab: true
+                    oab: true,
+                    officeId: true
                 }
             }
         },
@@ -102,7 +105,8 @@ async function findWithClientId(clientId: number):Promise<Processos[]> {
             Advogados: {
                 select:{
                     name: true,
-                    oab: true
+                    oab: true,
+                    officeId: true
                 }
             }
         },
@@ -131,7 +135,8 @@ async function findWithClientName(clientName: string): Promise<Processos[]>{
             Advogados: {
                 select:{
                     name: true,
-                    oab: true
+                    oab: true,
+                    officeId: true
                 }
             }
         },
@@ -159,7 +164,8 @@ async function findWithLawyerName(lawyerName: string): Promise<Processos[]>{
             Advogados: {
                 select:{
                     name: true,
-                    oab: true
+                    oab: true,
+                    officeId: true
                 }
             }
         },
@@ -169,10 +175,25 @@ async function findWithLawyerName(lawyerName: string): Promise<Processos[]>{
     })
 };
 
-async function findById(processId: number):Promise<Processos> {
+async function findById(processId: number) {
     return prisma.processos.findFirst({
         where:{
             id: processId
+        },
+        include:{
+            Clientes:{
+                select:{
+                    name: true,
+                    cpf:true,
+                }
+            },
+            Advogados: {
+                select:{
+                    name: true,
+                    oab: true,
+                    officeId: true
+                }
+            }
         }
     })
 };
@@ -189,7 +210,8 @@ async function findAllWihtlimit(){
             Advogados: {
                 select:{
                     name: true,
-                    oab: true
+                    oab: true,
+                    officeId: true
                 }
             }
         },
@@ -199,7 +221,7 @@ async function findAllWihtlimit(){
     })
 }
 
-async function update(params:CreateProcess, processId:number): Promise<Processos>{
+async function update(params:Partial<CreateProcess>, processId:number): Promise<Processos>{
     return prisma.processos.update({
         where:{
             id: processId

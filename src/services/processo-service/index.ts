@@ -1,13 +1,14 @@
-import processRepository from "../../repositories/Processo-repository";
+import processRepository from "../../repositories/processo-repository";
 import lawyerRepository from "../../repositories/advogados-repository";
 import clientRepository from "../../repositories/cliente-repository";
 import { Clientes, Processos } from "@prisma/client";
 import { notFoundError } from "../../errors/not-found-error";
 import { notFoundClientError } from "../../errors/not-found-client-error";
 import { notFoundLawyerError } from "../../errors/not-found-lawyer-error";
-import { CreateProcess, InputCreateProcess } from "../../protocols";
+import { CreateProcess, InputCreateProcess, InputUpdateProcess } from "../../protocols";
 import { duplicatedNumberError } from "../../errors/duplicated-number-error";
 import { GetProcess } from "../../protocols";
+import { invalidUpdateError } from "../../errors/invalid-update-error";
 
 async function createProcess(params: InputCreateProcess): Promise<Processos>{
 
@@ -33,9 +34,7 @@ async function createProcess(params: InputCreateProcess): Promise<Processos>{
         advogadoId: lawyer[0].id,
         secret: params.secret,
         anotherPartDoc: params.anotherPartDoc,
-        anotherPartName: params.anotherPartName,
-        limitTime: params.limitTime,
-        limitTimeDesc: params.limitTimeDesc,
+        anotherPartName: params.anotherPartName
     } as CreateProcess
 
 
@@ -96,9 +95,76 @@ async function getAllProcess({numberProcess, oab, cpf, lawyerName, clientName}):
     return process
 };
 
+async function updateProcess(params: InputUpdateProcess,officeId:number, processId: number): Promise<Processos> {
+    
+    const updateParams = params
+    if(!params.numberProcess && !params.anotherPartDoc && !params.anotherPartName && params.secret === undefined && !params.oab && !params.cpf){
+        throw invalidUpdateError();
+    };
+
+    const process = await processRepository.findById(processId);
+    if(!process){
+        throw notFoundError();
+    };
+
+    if(officeId !== process.Advogados.officeId){
+        throw notFoundError();
+    };
+
+    if(params.numberProcess){
+        const thereIsProcess = await processRepository.findWithNumberProcess(params.numberProcess)
+        if(thereIsProcess.length > 0 &&  thereIsProcess[0].id !== processId){
+            throw duplicatedNumberError();
+        }
+    };
+
+    if(params.cpf){
+        const thereIsCpf = await clientRepository.findWithcpf(params.cpf);
+        if(thereIsCpf.length === 0){
+            throw notFoundClientError();
+        };
+        await processRepository.update({clientId: thereIsCpf[0].id}, processId)
+    };
+
+    if(params.oab){
+        const thereIsOab = await lawyerRepository.findWithOab(params.oab);
+        if(thereIsOab.length === 0){
+            throw notFoundClientError();
+        };
+        await processRepository.update({advogadoId: thereIsOab[0].id}, processId)
+    };
+
+
+    if(params.oab || params.cpf){
+        delete updateParams.cpf
+        delete updateParams.oab
+    };
+
+    const updatedProcess = await processRepository.update(updateParams, processId);
+    return updatedProcess;
+};
+
+async function deleteOneProcess(processId:number, officeId: number){
+
+    const process = await processRepository.findById(processId)
+
+    if(!process){
+        throw notFoundError();
+    }
+
+    if(process.Advogados.officeId !== officeId){
+        throw notFoundError
+    }
+
+    const deletedProcess = await processRepository.deleteProcess(processId)
+    return deletedProcess
+};
+
 const processService = {
     createProcess,
-    getAllProcess
+    getAllProcess,
+    updateProcess,
+    deleteOneProcess
 };
 
 export default processService

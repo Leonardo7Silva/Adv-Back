@@ -3,6 +3,7 @@ import { duplicatedCpfError } from "../../errors/duplicated-cpf-error";
 import { notFoundError } from "../../errors/not-found-error";
 import { Clientes } from "@prisma/client";
 import { CreateClient } from "../../protocols";
+import { invalidUpdateError } from "../../errors/invalid-update-error";
 
 
 async function createClient(params: CreateClient): Promise<Clientes>{
@@ -36,6 +37,10 @@ async function getAllClients({cpf, name}): Promise<Clientes[]>{
 }
 
 async function updateClient(params:CreateClient, clientId:number):Promise<Clientes>{
+
+    if(!params.email && !params.name && !params.cpf && !params.tel){
+        throw invalidUpdateError();
+    }
 
     const client = await clientRepository.findById(clientId)
 
@@ -71,7 +76,7 @@ async function deleteOneClient(clientId:number, officeId: number){
 
     const deletedClient = await clientRepository.deleteClient(clientId)
     return deletedClient
-}
+};
 
 const clientService = {
     createClient,

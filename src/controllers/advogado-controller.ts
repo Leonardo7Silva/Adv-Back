@@ -39,16 +39,16 @@ export async function updateOneLawyer(req:AuthenticatedRequest, res: Response) {
         ...req.body
     }
     try{
+
         const uptadedLawyer = await lawyersService.updateLawyer(params, Number(lawyerId))
         return res.status(httpStatus.OK).send(uptadedLawyer)
+        
     }catch(err){
-        if(err.name === "DuplicatedOabError"){
-            res.status(httpStatus.FORBIDDEN).send(err)
-        }
+
         if(err.name === "NotFoundError"){
-            res.status(httpStatus.NOT_FOUND).send(err)
+            return res.status(httpStatus.NOT_FOUND).send(err)
         }
-        console.log(err)
+        return res.status(httpStatus.FORBIDDEN).send(err)
     }
 }
 

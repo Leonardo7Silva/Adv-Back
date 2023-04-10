@@ -3,6 +3,7 @@ import { Advogados } from "@prisma/client";
 import { CreateLawyer } from "protocols";
 import { notFoundError } from "../../errors/not-found-error";
 import { duplicatedOabError } from "../../errors/duplicated-oab-error";
+import { invalidUpdateError } from "../../errors/invalid-update-error";
 
 async function createLawyer(params: CreateLawyer): Promise<Advogados>{
 
@@ -36,6 +37,10 @@ async function getAllLawyers({oab, name}): Promise<Advogados[]>{
 
 async function updateLawyer(params:CreateLawyer, lawyerId:number):Promise<Advogados>{
 
+    if(!params.email && !params.name && !params.oab && !params.tel){
+        throw invalidUpdateError();
+    }
+
     const lawyer = await lawyerRepository.findById(lawyerId)
 
     if(!lawyer){
@@ -46,9 +51,11 @@ async function updateLawyer(params:CreateLawyer, lawyerId:number):Promise<Advoga
         throw notFoundError();
     }
 
-    const thereOab = await lawyerRepository.findWithOab(params.oab)
-    if(thereOab.length > 0 && thereOab[0].id !== lawyerId){
-        throw duplicatedOabError();
+    if(params.oab){
+        const thereOab = await lawyerRepository.findWithOab(params.oab)
+        if(thereOab.length > 0 && thereOab[0].id !== lawyerId){
+            throw duplicatedOabError();
+        }
     }
 
     const updatedLawyer = await lawyerRepository.update(params, lawyerId)

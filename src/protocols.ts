@@ -21,11 +21,19 @@ export type InputCreateProcess = {
   numberProcess: string,
   cpf: string,
   oab: string,
-  limitTime: Date,
-  limitTimeDesc: string,
   secret: boolean,
   anotherPartDoc: string,
   anotherPartName: string
+};
+
+export type InputUpdateProcess = {
+  numberProcess: string,
+  cpf: string,
+  oab: string,
+  secret: boolean,
+  anotherPartDoc: string,
+  anotherPartName: string,
+  officeId: number
 }
 
 export type GetProcess = {

@@ -36,4 +36,39 @@ export async function getAllTheProcess(req: AuthenticatedRequest, res:Response){
     }catch(err){
         return res.status(httpStatus.NOT_FOUND).send(err)
     }
+};
+
+export async function updateOneProcess(req: AuthenticatedRequest, res: Response){
+    
+    const {officeId} = req
+    const {processId} = req.params
+    const params = {
+        ...req.body
+    };
+
+    try{
+
+        const updatedProcess = await processService.updateProcess(params,officeId, Number(processId));
+        return res.status(httpStatus.OK).send(updatedProcess)
+
+    }catch(err){
+        if(err.name === "InvalidUpdateError" || err.name === "DuplicatedNumberError"){
+            return res.status(httpStatus.FORBIDDEN).send(err)
+        };
+        console.log(err)
+        return res.status(httpStatus.NOT_FOUND).send(err)
+    }
+};
+
+export async function deleteOneProcess(req:AuthenticatedRequest, res: Response) {
+    
+    const {officeId} = req
+    const {processId} = req.params
+    try{
+        const deletedProcess = await processService.deleteOneProcess(Number(processId), officeId);
+        return res.status(httpStatus.OK).send(deletedProcess)
+    }catch(err){
+
+        res.status(httpStatus.NOT_FOUND).send(err)
+    }
 }
