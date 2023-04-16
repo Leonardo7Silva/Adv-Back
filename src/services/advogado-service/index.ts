@@ -1,6 +1,6 @@
 import lawyerRepository from "../../repositories/advogados-repository";
 import { Advogados } from "@prisma/client";
-import { CreateLawyer } from "protocols";
+import { CreateLawyer } from "../../protocols";
 import { notFoundError } from "../../errors/not-found-error";
 import { duplicatedOabError } from "../../errors/duplicated-oab-error";
 import { invalidUpdateError } from "../../errors/invalid-update-error";

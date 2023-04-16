@@ -13,6 +13,9 @@ export const createProcessSchema = Joi.object<InputCreateProcess>({
     cpf: cpfValidationSchema,
     oab: Joi.string().min(6).required(),
     secret:  Joi.boolean().required(),
+    audienceDay: Joi.string().isoDate().min(20),
+    limitTime: Joi.string().isoDate().min(20),
+    limitTimeDesc: Joi.string().min(3),
     anotherPartDoc: cpfOrCnpjValidationSchema,
     anotherPartName: Joi.string().min(3).required()
 });
@@ -24,7 +27,10 @@ export const updateProcessSchema = Joi.object<InputCreateProcess>({
   oab: Joi.string().min(6),
   secret:  Joi.boolean(),
   anotherPartDoc: updateCpfOrCnpjValidationSchema,
-  anotherPartName: Joi.string().min(3)
+  anotherPartName: Joi.string().min(3),
+  audienceDay: Joi.string().isoDate().min(20),
+  limitTime: Joi.string().isoDate().min(20),
+  limitTimeDesc: Joi.string().min(3)
 
 })
 

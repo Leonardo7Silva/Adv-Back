@@ -37,6 +37,7 @@ model Comentarios {
   id        Int       @id(map: "Comentarios_pk") @default(autoincrement())
   comment   String
   processId Int
+  title     String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   Processos Processos @relation(fields: [processId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Comentarios_fk0")
@@ -51,6 +52,7 @@ model Offices {
   updatedAt DateTime?   @updatedAt
   Advogados Advogados[]
   Clientes  Clientes[]
+  Processos Processos[]
 }
 
 model Processos {
@@ -59,13 +61,16 @@ model Processos {
   clientId        Int
   advogadoId      Int
   secret          Boolean
+  audienceDay     DateTime?     
   anotherPartDoc  String
   anotherPartName String
-  limitTime       DateTime?      @db.Date
+  limitTime       DateTime?     
   limitTimeDesc   String?
   createdAt       DateTime      @default(now())
-  updatedAt        DateTime?     @updatedAt
+  updatedAt       DateTime?     @updatedAt
   Comentarios     Comentarios[]
+  officeId  Int
   Clientes        Clientes      @relation(fields: [clientId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk0")
   Advogados       Advogados     @relation(fields: [advogadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk1")
+  Offices         Offices       @relation(fields: [officeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Processos_fk2")
 }

@@ -10,7 +10,11 @@ import { duplicatedNumberError } from "../../errors/duplicated-number-error";
 import { GetProcess } from "../../protocols";
 import { invalidUpdateError } from "../../errors/invalid-update-error";
 
-async function createProcess(params: InputCreateProcess): Promise<Processos>{
+async function createProcess(params: InputCreateProcess, officeId: number): Promise<Processos>{
+
+    const createParams = {...params} 
+    delete createParams.cpf
+    delete createParams.oab
 
     const thereNumber = await processRepository.findWithNumberProcess(params.numberProcess)
     if(thereNumber.length > 0){
@@ -33,8 +37,12 @@ async function createProcess(params: InputCreateProcess): Promise<Processos>{
         clientId: client[0].id,
         advogadoId: lawyer[0].id,
         secret: params.secret,
+        audienceDay: params.audienceDay,
         anotherPartDoc: params.anotherPartDoc,
-        anotherPartName: params.anotherPartName
+        anotherPartName: params.anotherPartName,
+        limitTime: params.limitTime,
+        limitTimeDesc: params.limitTimeDesc,
+        officeId
     } as CreateProcess
 
 
@@ -98,7 +106,7 @@ async function getAllProcess({numberProcess, oab, cpf, lawyerName, clientName}):
 async function updateProcess(params: InputUpdateProcess,officeId:number, processId: number): Promise<Processos> {
     
     const updateParams = params
-    if(!params.numberProcess && !params.anotherPartDoc && !params.anotherPartName && params.secret === undefined && !params.oab && !params.cpf){
+    if(!params.numberProcess && !params.anotherPartDoc && !params.anotherPartName && params.secret === undefined && !params.oab && !params.cpf && !params.audienceDay && !params.limitTime && !params.limitTimeDesc){
         throw invalidUpdateError();
     };
 

@@ -1,4 +1,5 @@
 import { Clientes, Offices, Advogados, Processos } from "@prisma/client";
+import { type } from "os";
 
 export type ApplicationError = {
     name: string;
@@ -23,7 +24,10 @@ export type InputCreateProcess = {
   oab: string,
   secret: boolean,
   anotherPartDoc: string,
-  anotherPartName: string
+  anotherPartName: string,
+  audienceDay: Date,
+  limitTime: Date,
+  limitTimeDesc: string
 };
 
 export type InputUpdateProcess = {
@@ -33,7 +37,10 @@ export type InputUpdateProcess = {
   secret: boolean,
   anotherPartDoc: string,
   anotherPartName: string,
-  officeId: number
+  officeId: number,
+  limitTime: Date,
+  limitTimeDesc: string,
+  audienceDay: Date
 }
 
 export type GetProcess = {
@@ -42,4 +49,10 @@ export type GetProcess = {
   oab: string,
   clientName: string,
   lawyerName: string
+}
+
+export type CreateComment = {
+  comment: string,
+  numberProcess: string,
+  title: string
 }

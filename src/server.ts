@@ -5,6 +5,7 @@ import officeRouter from './routers/escritorio-router';
 import signinRouter from './routers/signin-router';
 import lawyerRouter from './routers/advogado-router';
 import processRouter from './routers/processo-router';
+import commentRouter from './routers/comentario-router';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app
     .use("/signin", signinRouter)
     .use("/advogado", lawyerRouter)
     .use("/processo", processRouter)
+    .use("/comentario", commentRouter)
 
 
 
