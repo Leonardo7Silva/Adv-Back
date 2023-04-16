@@ -1,5 +1,5 @@
 import { AuthenticatedRequest } from "../middlewares/auth-middleware";
-import { Response } from "express";
+import { Response, Request } from "express";
 import httpStatus from "http-status";
 import processService from "../services/processo-service";
 import { InputCreateProcess, GetProcess } from "../protocols";
@@ -37,6 +37,21 @@ export async function getAllTheProcess(req: AuthenticatedRequest, res:Response){
     }catch(err){
         return res.status(httpStatus.NOT_FOUND).send(err)
     }
+};
+
+export async function getProcessByCpf(req: Request, res: Response){
+
+    const {cpf} = req.params;
+
+    try{
+
+        const process = await processService.findProcessByCpf(cpf);
+        return res.status(httpStatus.OK).send(process)
+
+    }catch(err){
+        return res.status(httpStatus.NOT_FOUND).send(err)
+    }
+
 };
 
 export async function updateOneProcess(req: AuthenticatedRequest, res: Response){

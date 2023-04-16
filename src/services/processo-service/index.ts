@@ -103,6 +103,29 @@ async function getAllProcess({numberProcess, oab, cpf, lawyerName, clientName}):
     return process
 };
 
+async function findProcessByCpf(cpf: string):Promise<Processos[]>{
+
+    if(cpf.length < 11){
+        throw notFoundError();
+    };
+
+    if(!parseInt(cpf)){
+        throw notFoundError();
+    };
+
+    const client = await clientRepository.findWithcpf(cpf);
+    if(client.length === 0){
+        throw notFoundClientError();
+    };
+
+    const processos = await processRepository.findWithClientId(client[0].id)
+    if(processos.length === 0){
+        throw notFoundError();
+    };
+
+    return processos;
+};
+
 async function updateProcess(params: InputUpdateProcess,officeId:number, processId: number): Promise<Processos> {
     
     const updateParams = params
@@ -172,7 +195,8 @@ const processService = {
     createProcess,
     getAllProcess,
     updateProcess,
-    deleteOneProcess
+    deleteOneProcess,
+    findProcessByCpf
 };
 
 export default processService

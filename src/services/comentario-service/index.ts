@@ -28,6 +28,10 @@ async function findComments(numberProcess: string):Promise<Comentarios[]>{
 
     if(!parseInt(numberProcess)){
         throw invalidParamsError();
+    };
+
+    if(numberProcess.length !== 18){
+        throw notFoundError();
     }
 
     const process = await processRepository.findWithNumberProcess(numberProcess)

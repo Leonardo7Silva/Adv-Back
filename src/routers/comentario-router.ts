@@ -7,9 +7,9 @@ import { authenticateToken } from "../middlewares/auth-middleware";
 const commentRouter = Router();
 
 commentRouter
+    .get("/:processNumber", getComments)
     .all("/*", authenticateToken)
     .post("/", validateBody(comentSchema), postComment)
-    .get("/:processNumber", getComments)
     .put("/:commentId", validateBody(updateComentSchema), updateOneComment)
     .delete("/:commentId", deleteOneComment)
 
